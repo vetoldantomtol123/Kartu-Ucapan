@@ -1,0 +1,406 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kartu Ucapan Untuk Kita</title>
+  <style>
+    :root {
+      --ink: #28211f;
+      --muted: #6d625e;
+      --paper: #fff8f1;
+      --rose: #c94f5b;
+      --coral: #ef8665;
+      --leaf: #4f745e;
+      --gold: #b88a44;
+      --shadow: rgba(62, 42, 35, 0.18);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 28px;
+      color: var(--ink);
+      font-family: Georgia, "Times New Roman", serif;
+      background:
+        radial-gradient(circle at top left, rgba(239, 134, 101, 0.28), transparent 32rem),
+        linear-gradient(135deg, #f9e7dc 0%, #eef2e6 52%, #f7dfcf 100%);
+    }
+
+    .lock-screen {
+      width: min(430px, 100%);
+      padding: 34px;
+      border: 1px solid rgba(184, 138, 68, 0.42);
+      border-radius: 8px;
+      background: rgba(255, 248, 241, 0.95);
+      box-shadow: 0 22px 70px var(--shadow);
+      text-align: center;
+    }
+
+    .lock-screen.hidden {
+      display: none;
+    }
+
+    .lock-title {
+      margin: 10px 0 8px;
+      color: var(--rose);
+      font-size: clamp(2.1rem, 8vw, 3.4rem);
+      line-height: 1;
+    }
+
+    .lock-copy {
+      margin: 0 auto 22px;
+      max-width: 310px;
+      color: var(--muted);
+      font-family: Arial, sans-serif;
+      font-size: 0.95rem;
+      line-height: 1.55;
+    }
+
+    .pin-form {
+      display: grid;
+      gap: 12px;
+    }
+
+    .pin-input {
+      width: 100%;
+      min-height: 52px;
+      border: 1px solid rgba(109, 98, 94, 0.28);
+      border-radius: 8px;
+      padding: 0 16px;
+      color: var(--ink);
+      background: #ffffff;
+      font-family: Arial, sans-serif;
+      font-size: 1.2rem;
+      text-align: center;
+      letter-spacing: 0.18em;
+      outline: none;
+    }
+
+    .pin-input:focus {
+      border-color: var(--rose);
+      box-shadow: 0 0 0 4px rgba(201, 79, 91, 0.14);
+    }
+
+    .open-button {
+      min-height: 50px;
+      border: 0;
+      border-radius: 8px;
+      color: #fffaf6;
+      background: var(--rose);
+      font-family: Arial, sans-serif;
+      font-size: 0.96rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .open-button:hover {
+      background: #b83f4b;
+    }
+
+    .pin-error {
+      min-height: 20px;
+      margin: 0;
+      color: var(--rose);
+      font-family: Arial, sans-serif;
+      font-size: 0.88rem;
+    }
+
+    .card {
+      width: min(760px, 100%);
+      min-height: 520px;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(184, 138, 68, 0.42);
+      border-radius: 8px;
+      background: var(--paper);
+      box-shadow: 0 22px 70px var(--shadow);
+    }
+
+    .card.locked {
+      display: none;
+    }
+
+    .ribbon {
+      height: 14px;
+      background: linear-gradient(90deg, var(--rose), var(--coral), var(--leaf), var(--gold));
+    }
+
+    .content {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      gap: 24px;
+      padding: clamp(30px, 7vw, 64px);
+    }
+
+    .eyebrow {
+      margin: 0;
+      color: var(--leaf);
+      font-family: Arial, sans-serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      max-width: 12ch;
+      margin: 0;
+      color: var(--rose);
+      font-size: clamp(2.7rem, 9vw, 5.7rem);
+      line-height: 0.92;
+      letter-spacing: 0;
+    }
+
+    .message {
+      max-width: 570px;
+      margin: 0;
+      color: var(--ink);
+      font-size: clamp(1.05rem, 2.6vw, 1.35rem);
+      line-height: 1.72;
+    }
+
+    .signature {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 14px;
+      align-items: center;
+      color: var(--muted);
+      font-family: Arial, sans-serif;
+      font-size: 0.95rem;
+    }
+
+    .reply-box {
+      display: grid;
+      gap: 12px;
+      max-width: 570px;
+      padding-top: 4px;
+      font-family: Arial, sans-serif;
+    }
+
+    .reply-label {
+      color: var(--leaf);
+      font-size: 0.88rem;
+      font-weight: 700;
+    }
+
+    .reply-message {
+      width: 100%;
+      min-height: 88px;
+      resize: vertical;
+      border: 1px solid rgba(109, 98, 94, 0.28);
+      border-radius: 8px;
+      padding: 13px 14px;
+      color: var(--ink);
+      background: #ffffff;
+      font: 0.98rem/1.5 Arial, sans-serif;
+      outline: none;
+    }
+
+    .reply-message:focus {
+      border-color: var(--leaf);
+      box-shadow: 0 0 0 4px rgba(79, 116, 94, 0.14);
+    }
+
+    .whatsapp-button {
+      width: fit-content;
+      min-height: 46px;
+      border: 0;
+      border-radius: 8px;
+      padding: 0 18px;
+      color: #ffffff;
+      background: #1f8f52;
+      font-size: 0.94rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .whatsapp-button:hover {
+      background: #187a45;
+    }
+
+    .line {
+      width: 72px;
+      height: 1px;
+      background: var(--gold);
+    }
+
+    .flowers {
+      position: absolute;
+      right: -18px;
+      bottom: -22px;
+      width: min(260px, 42vw);
+      aspect-ratio: 1;
+      opacity: 0.9;
+    }
+
+    .flower {
+      position: absolute;
+      width: 86px;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle, #fff8f1 0 12%, transparent 13%),
+        radial-gradient(circle at 50% 14%, #ef8665 0 16%, transparent 17%),
+        radial-gradient(circle at 86% 50%, #c94f5b 0 16%, transparent 17%),
+        radial-gradient(circle at 50% 86%, #ef8665 0 16%, transparent 17%),
+        radial-gradient(circle at 14% 50%, #c94f5b 0 16%, transparent 17%);
+    }
+
+    .flower.one {
+      right: 54px;
+      bottom: 70px;
+    }
+
+    .flower.two {
+      right: 128px;
+      bottom: 32px;
+      width: 64px;
+      transform: rotate(18deg);
+    }
+
+    .stem {
+      position: absolute;
+      right: 88px;
+      bottom: 0;
+      width: 3px;
+      height: 132px;
+      transform: rotate(24deg);
+      transform-origin: bottom;
+      background: var(--leaf);
+    }
+
+    .leaf {
+      position: absolute;
+      width: 58px;
+      height: 28px;
+      border-radius: 100% 0 100% 0;
+      background: #6d8d62;
+    }
+
+    .leaf.left {
+      right: 122px;
+      bottom: 62px;
+      transform: rotate(-10deg);
+    }
+
+    .leaf.right {
+      right: 46px;
+      bottom: 92px;
+      transform: rotate(52deg);
+    }
+
+    @media print {
+      body {
+        padding: 0;
+        background: #ffffff;
+      }
+
+      .card {
+        width: 100vw;
+        min-height: 100vh;
+        border: 0;
+        box-shadow: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <section class="lock-screen" id="lockScreen" aria-label="Masukkan PIN tanggal jadian">
+    <p class="eyebrow">Kunci kecil untuk kenangan besar</p>
+    <h1 class="lock-title">Masukkan PIN</h1>
+    <p class="lock-copy">Gunakan tanggal jadian kita untuk membuka kartu ini.</p>
+    <form class="pin-form" id="pinForm">
+      <input
+        class="pin-input"
+        id="pinInput"
+        type="password"
+        inputmode="numeric"
+        maxlength="8"
+        autocomplete="off"
+        placeholder="DDMMYYYY"
+        aria-label="PIN tanggal jadian"
+      >
+      <button class="open-button" type="submit">Buka Kartu</button>
+      <p class="pin-error" id="pinError" aria-live="polite"></p>
+    </form>
+  </section>
+
+  <main class="card locked" id="card" aria-label="Kartu ucapan romantis">
+    <div class="ribbon"></div>
+    <section class="content">
+      <p class="eyebrow">Untuk hubungan yang kita jaga</p>
+      <h1>Untuk Kita</h1>
+      <p class="message">
+        Terima kasih sudah menjadi tempat pulang yang hangat, teman bercerita
+        yang paling aku cari, dan alasan sederhana yang membuat hari-hariku
+        terasa lebih berarti. Semoga kita selalu punya sabar untuk saling
+        memahami, waktu untuk saling menemani, dan hati yang tetap memilih
+        satu sama lain.
+      </p>
+      <div class="signature">
+        <span class="line" aria-hidden="true"></span>
+        <span>Dengan sayang, dari aku untuk kamu</span>
+      </div>
+      <div class="reply-box">
+        <label class="reply-label" for="replyMessage">Balasanmu untuk aku</label>
+        <textarea class="reply-message" id="replyMessage" placeholder="Tulis balasanmu di sini..."></textarea>
+        <button class="whatsapp-button" id="whatsappButton" type="button">Kirim lewat WhatsApp</button>
+      </div>
+    </section>
+    <div class="flowers" aria-hidden="true">
+      <div class="stem"></div>
+      <div class="leaf left"></div>
+      <div class="leaf right"></div>
+      <div class="flower one"></div>
+      <div class="flower two"></div>
+    </div>
+  </main>
+
+  <script>
+    const pinForm = document.getElementById("pinForm");
+    const pinInput = document.getElementById("pinInput");
+    const pinError = document.getElementById("pinError");
+    const lockScreen = document.getElementById("lockScreen");
+    const card = document.getElementById("card");
+    const correctPin = "14052026";
+    const whatsappNumber = "6282144818272";
+    const whatsappButton = document.getElementById("whatsappButton");
+    const replyMessage = document.getElementById("replyMessage");
+
+    pinInput.focus();
+
+    pinForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const enteredPin = pinInput.value.replace(/\D/g, "");
+
+      if (enteredPin === correctPin) {
+        lockScreen.classList.add("hidden");
+        card.classList.remove("locked");
+        return;
+      }
+
+      pinError.textContent = "PIN belum cocok. Coba pakai format 14052026.";
+      pinInput.value = "";
+      pinInput.focus();
+    });
+
+    whatsappButton.addEventListener("click", () => {
+      const message = replyMessage.value.trim() || "Aku sudah baca pesannya.";
+      const encodedMessage = encodeURIComponent(message);
+      const url = whatsappNumber
+        ? `https://wa.me/${whatsappNumber}?text=${encodedMessage}`
+        : `https://wa.me/?text=${encodedMessage}`;
+
+      window.open(url, "_blank");
+    });
+  </script>
+</body>
+</html>
